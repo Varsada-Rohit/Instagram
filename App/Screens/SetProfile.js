@@ -1,5 +1,7 @@
-import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, Image, Text, PermissionsAndroid} from 'react-native';
+import ImagePicker from 'react-native-image-picker';
+
 import Color from '../Config/Color';
 import AppButton from '../Components/AppButton';
 import useAuth from '../Auth/useAuth';
@@ -7,23 +9,57 @@ import auth from '@react-native-firebase/auth';
 
 function SetProfile({navigation}) {
   const {register} = useAuth();
+  const [profile, setProfile] = useState();
+
+  const CheckPermission = async () => {
+    const result = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    );
+    if (result === 'granted') {
+      ShowImagePicker();
+    } else {
+      console.log(result);
+    }
+  };
+
+  const ShowImagePicker = () => {
+    ImagePicker.showImagePicker({maxHeight: 400, maxWidth: 400}, (response) => {
+      if (response.didCancel) {
+        console.log('image picker canceled');
+      } else if (response.error) {
+        console.log('error in image picker', response.error);
+      } else {
+        setProfile(response.uri);
+        console.log(response.uri);
+      }
+    });
+  };
 
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
         <View style={styles.profileView}>
-          <Image
-            style={styles.profile}
-            source={require('../Assests/Camera.png')}
-            resizeMode="contain"
-          />
+          {!profile && (
+            <Image
+              style={styles.profile}
+              source={require('../Assests/Camera.png')}
+              resizeMode="contain"
+            />
+          )}
+          {profile && (
+            <Image
+              source={{uri: profile}}
+              style={{width: '100%', height: '100%'}}
+              resizeMode="contain"
+            />
+          )}
         </View>
         <Text style={styles.title}>Add Profile Photo</Text>
         <Text style={styles.subTitle}>
           Add a profile photo so your friends know it's you.
         </Text>
       </View>
-      <AppButton title="Add a Photo" />
+      <AppButton title="Add a Photo" onPress={() => CheckPermission()} />
       <AppButton
         style={{backgroundColor: 'transparent', marginVertical: 0}}
         textStyle={{color: Color.blue, fontSize: 18}}
@@ -43,6 +79,7 @@ const styles = StyleSheet.create({
   },
   profileView: {
     borderWidth: 2,
+    overflow: 'hidden',
     width: 120,
     height: 120,
     justifyContent: 'center',
