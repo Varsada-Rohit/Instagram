@@ -11,11 +11,11 @@ const Stack = createStackNavigator();
 export default function AuthNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="SetProfile" component={SetProfile} />
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Signup" component={CreateAccount} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Password" component={CreatePassword} />
+      <Stack.Screen name="SetProfile" component={SetProfile} />
     </Stack.Navigator>
   );
 }

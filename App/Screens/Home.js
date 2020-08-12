@@ -1,15 +1,20 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import AppButton from '../Components/AppButton';
 import useAuth from '../Auth/useAuth';
+import PostCard from '../Components/PostCard';
 
 function Home() {
   const {logout} = useAuth();
 
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
-      <AppButton title="Logout" onPress={() => logout()} />
+      <ScrollView>
+        {/* <Text>Home</Text>
+        <AppButton title="Logout" onPress={() => logout()} /> */}
+        {/* <PostCard /> */}
+        <PostCard />
+      </ScrollView>
     </View>
   );
 }

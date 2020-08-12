@@ -52,6 +52,7 @@ function Login({navigation}) {
           />
           <AppButton
             title="Log in"
+            disabled={email && password ? false : true}
             onPress={() => onLoginBtn({email, password})}
           />
           <AuthFooter

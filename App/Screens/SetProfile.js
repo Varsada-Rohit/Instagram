@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Image, Text, PermissionsAndroid} from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Color from '../Config/Color';
 import AppButton from '../Components/AppButton';
 import useAuth from '../Auth/useAuth';
 import auth from '@react-native-firebase/auth';
+import ImageStorage from '../Backend/ImageStorage';
 
 function SetProfile({navigation}) {
   const {register} = useAuth();
@@ -22,17 +23,33 @@ function SetProfile({navigation}) {
     }
   };
 
+  // const ShowImagePicker = () => {
+  //   ImagePicker.showImagePicker(
+  //     {maxHeight: 400, maxWidth: 400},
+  //     async (response) => {
+  //       if (response.didCancel) {
+  //         console.log('image picker canceled');
+  //       } else if (response.error) {
+  //         console.log('error in image picker', response.error);
+  //       } else {
+  //         setProfile(response.uri);
+  //         const result = await ImageStorage.UploadImage(response.uri);
+  //         console.log(result);
+  //       }
+  //     },
+  //   );
+  // };
+
   const ShowImagePicker = () => {
-    ImagePicker.showImagePicker({maxHeight: 400, maxWidth: 400}, (response) => {
-      if (response.didCancel) {
-        console.log('image picker canceled');
-      } else if (response.error) {
-        console.log('error in image picker', response.error);
-      } else {
-        setProfile(response.uri);
-        console.log(response.uri);
-      }
-    });
+    try {
+      ImagePicker.openPicker({width: 200, height: 200, cropping: true}).then(
+        async (res) => {
+          console.log(res);
+          const result = await ImageStorage.UploadImage(res.path);
+          setProfile(res.path);
+        },
+      );
+    } catch (error) {}
   };
 
   return (
