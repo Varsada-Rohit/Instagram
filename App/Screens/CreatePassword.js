@@ -8,10 +8,12 @@ import ErrorText from '../Components/ErrorText';
 import auth from '../Auth/Auth';
 import useAuth from '../Auth/useAuth';
 import Loading from '../Components/Loading';
+import useUserProvider from '../Backend/useUserProvider';
 
 function CreatePassword({route, navigation}) {
   const {email} = route.params;
   const {register} = useAuth();
+  const {addUser} = useUserProvider();
 
   const [dname, setDname] = useState('');
   const [password, setpassword] = useState('');
@@ -27,6 +29,7 @@ function CreatePassword({route, navigation}) {
       return;
     }
     setLoading(false);
+    await addUser({email : result.user.email,name:result.user.displayName,username : result.user.email.split('@')[0]})
     navigation.navigate('SetProfile');
   };
 

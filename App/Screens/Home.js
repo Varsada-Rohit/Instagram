@@ -10,9 +10,9 @@ function Home() {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {/* <Text>Home</Text>
-        <AppButton title="Logout" onPress={() => logout()} /> */}
-        {/* <PostCard /> */}
+        <Text>Home</Text>
+        <AppButton title="Logout" onPress={() => logout()} />
+        <PostCard />
         <PostCard />
       </ScrollView>
     </View>
