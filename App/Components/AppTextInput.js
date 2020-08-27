@@ -2,9 +2,9 @@ import React from 'react';
 import {View, StyleSheet, TextInput} from 'react-native';
 import Color from '../Config/Color';
 
-function AppTextInput({...otherPerameters}) {
+function AppTextInput({style, ...otherPerameters}) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <TextInput
         {...otherPerameters}
         style={{fontSize: 18, paddingHorizontal: 10}}

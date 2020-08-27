@@ -29,8 +29,12 @@ function CreatePassword({route, navigation}) {
       return;
     }
     setLoading(false);
-    await addUser({email : result.user.email,name:result.user.displayName,username : result.user.email.split('@')[0]})
-    navigation.navigate('SetProfile');
+    await addUser({
+      email: result.user.email,
+      name: result.user.displayName,
+      username: result.user.email.split('@')[0],
+    });
+    navigation.navigate('SetProfile', {user: result.user.email});
   };
 
   return (

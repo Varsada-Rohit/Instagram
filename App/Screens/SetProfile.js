@@ -8,9 +8,10 @@ import useAuth from '../Auth/useAuth';
 import auth from '@react-native-firebase/auth';
 import ImageStorage from '../Backend/ImageStorage';
 
-function SetProfile({navigation}) {
+function SetProfile({navigation, route}) {
   const {register} = useAuth();
   const [profile, setProfile] = useState();
+  const {user} = route.params;
 
   const CheckPermission = async () => {
     const result = await PermissionsAndroid.request(
@@ -41,15 +42,26 @@ function SetProfile({navigation}) {
   // };
 
   const ShowImagePicker = () => {
-    try {
-      ImagePicker.openPicker({width: 200, height: 200, cropping: true}).then(
-        async (res) => {
-          console.log(res);
-          const result = await ImageStorage.UploadImage(res.path);
-          setProfile(res.path);
-        },
-      );
-    } catch (error) {}
+    ImagePicker.openPicker({
+      width: 200,
+      height: 200,
+      cropping: true,
+      cropperActiveWidgetColor: Color.blue,
+      cropperToolbarWidgetColor: 'white',
+      cropperStatusBarColor: 'grey',
+      cropperTintColor: 'red',
+      cropperCircleOverlay: true,
+      cropperToolbarColor: Color.blue,
+    })
+      .then(async (res) => {
+        console.log(res);
+        setProfile(res.path);
+        const result = await ImageStorage.UploadImage(res.path, user);
+        register(auth().currentUser);
+      })
+      .catch((error) => {
+        console.log('selecting profile', error);
+      });
   };
 
   return (
